@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" metadata-complete="true" version="3.1">
+	<display-name>Projeto Java Web Completo</display-name>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<!-- Sessao de inatividade -->
+	<session-config>
+		<session-timeout>15</session-timeout> <!-- Tempo que ficara ativo o sistema sem mexer na secao... 15 minutos -->
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+
+	<!-- paginas de erros -->
+	<error-page>
+		<exception-type>org.springframework.security.access.AccessDeniedException</exception-type>
+		<location>/error/acessoNegado.jsf</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>com.sun.faces.context.FacesFileNotFoundException</exception-type>
+		<location>/error/paginaNaoEncontrada.jsf</location>
+	</error-page>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error/acessoNegado.jsf</location>
+	</error-page>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/4040.jsf</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code> <!-- Erro interno de servidor -->
+		<location>/error/error.jsf</location>
+	</error-page>
+
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>com.sun.faces.allowTextChildren</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>com.sun.faces.expressionFactory</param-name>
+		<param-value>com.sun.el.ExpressionFactoryImpl</param-value>
+	</context-param>
+
+	<!-- tempo de mudanca de pagina -->
+	<context-param>
+		<param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
+		<param-value>0</param-value> <!-- Tempo em segundos -->
+	</context-param>
+
+	<!-- Extencoes das paginas que estao sedo trabalhadas -->
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml .html .jsp</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+
+	<!-- Cor da aplicacao do tema -->
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>smoothness</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>PrimeFaces FileUpload Filter</filter-name>
+		<servlet-name>Faces Servlets</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</filter-mapping>
+
+	<!-- Configuracao do banco -->
+	<resource-ref>
+		<description>DataSource datasource</description>
+		<res-ref-name>jdbc/datasource</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+
+	<!-- Processa o siglo de vida do JSF -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	
+</web-app>
