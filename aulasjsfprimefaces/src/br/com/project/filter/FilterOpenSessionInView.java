@@ -24,13 +24,6 @@ import br.com.framework.utils.UtilFramework;
 import br.com.project.listener.ContextLoaderListenerCaixakiUtils;
 import br.com.project.model.classes.Entidade;
 
-/**
- * Classeque ira passar toda a requisicao e resposta do sistema
- * 
- * @author Rodrigo
- *
- */
-
 @WebFilter(filterName = "conexaoFilter")
 public class FilterOpenSessionInView extends DelegatingFilterProxy implements Serializable {
 
@@ -38,44 +31,41 @@ public class FilterOpenSessionInView extends DelegatingFilterProxy implements Se
 
 	private static SessionFactory sf;
 
-	// executado apenas uma vez
-	// executado quando a aplciacao esta sendo iniciada
+	// executa apenas uma vez
+	// executado quando a aplicação está sendo iniciada
 	@Override
 	protected void initFilterBean() throws ServletException {
+
 		sf = HibernateUtil.getSessionFactory();
 	}
 
-	// metodo que sera invocado para toda requisicao e resposta
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 
-		// JDBC Spring
-		BasicDataSource springBasicDataSource = (BasicDataSource) ContextLoaderListenerCaixakiUtils
+		// JDBC SPring
+		BasicDataSource sprinBasicDataSource = (BasicDataSource) ContextLoaderListenerCaixakiUtils
 				.getBean("springDataSource");
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-		PlatformTransactionManager transactionManager = new DataSourceTransactionManager(springBasicDataSource);
+		PlatformTransactionManager transactionManager = new DataSourceTransactionManager(sprinBasicDataSource);
 		TransactionStatus status = transactionManager.getTransaction(def);
 
 		try {
+			request.setCharacterEncoding("UTF-8");// DEFINE CODIFICAÇÃO
 
-			request.setCharacterEncoding("UTF-8"); // Define a codificacao
-
-			// captura usuario que faz a operacao
+			// captura usuário que faz a operação
 			HttpServletRequest request2 = (HttpServletRequest) request;
 			HttpSession sessao = request2.getSession();
 			Entidade userLogadoSessao = (Entidade) sessao.getAttribute("userLogadoSessao");
 
 			if (userLogadoSessao != null) {
-				UtilFramework.getThreadLocal().set(userLogadoSessao.getEnt_codigo()); // seta o codigo para a thread
-																						// logado
+				UtilFramework.getThreadLocal().set(userLogadoSessao.getEnt_codigo());
 			}
 
-			sf.getCurrentSession().beginTransaction(); // inicia a sessao do hibernate
-
-			// antes de executar acao (Request)
-			chain.doFilter(request, response); // executa nossa acao no servidor
-			// apos de executar acao (Resposta)
+			sf.getCurrentSession().beginTransaction();
+			// antes de executar ação (Request)
+			chain.doFilter(request, response);// executa nossa ação no servidor
+			// após de executar ação (Resposta)
 
 			transactionManager.commit(status);
 
@@ -92,6 +82,7 @@ public class FilterOpenSessionInView extends DelegatingFilterProxy implements Se
 			response.setContentType("text/html; charset=UTF-8");
 
 		} catch (Exception e) {
+
 			transactionManager.rollback(status);
 
 			e.printStackTrace();
@@ -116,7 +107,6 @@ public class FilterOpenSessionInView extends DelegatingFilterProxy implements Se
 				}
 			}
 		}
-
 	}
 
 }

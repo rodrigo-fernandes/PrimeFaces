@@ -10,10 +10,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.SessionFactoryImplementor;
-import org.hibernate.service.ServiceRegistry;
 
 import br.com.framework.implementacao.crud.VariavelConexaoUtil;
 
@@ -33,17 +31,13 @@ public class HibernateUtil implements Serializable {
 
 	/*
 	 * Responsavel por ler o arquivo de configuracao hibernate.cfg.xml
+	 * 
 	 * @return SessionFactory
 	 */
 	private static SessionFactory buildSessionFactory() {
 		try {
 			if (sessionFactory == null) {
-				Configuration configuration = new Configuration().configure();
-				ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-						.applySettings(configuration.getProperties()).build();
-
-				// builds a session factory from the service registry
-				sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+				sessionFactory = new Configuration().configure().buildSessionFactory();
 			}
 
 			return sessionFactory;
