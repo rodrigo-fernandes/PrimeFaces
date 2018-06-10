@@ -2,7 +2,7 @@
     <wb-module deploy-name="aulasjsfprimefaces">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="aulasjsfprimefaces"/>
         <property name="java-output-path" value="/aulasjsfprimefaces/build/classes"/>
+        <property name="context-root" value="aulasjsfprimefaces"/>
     </wb-module>
 </project-modules>
